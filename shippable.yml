@@ -8,18 +8,17 @@ node_js:
 env:
   global:
     - XUNIT_FILE=./shippable/testresults/result.xml
-    - APPLICATION=shippable
     - SERVICE=micro-api
     - REGISTRY_ACCOUNT=195324580561.dkr.ecr.us-west-2.amazonaws.com # image registry account name/location
 
 build:
   pre_ci:
-    - docker build -t $REGISTRY_ACCOUNT/$APPLICATION/$SERVICE:latest .
+    - docker build -t $REGISTRY_ACCOUNT/$SERVICE:latest .
     - node --version
     - mkdir -p ./shippable/testresults
     - mkdir -p ./shippable/codecoverage
   pre_ci_boot:
-    image_name: $REGISTRY_ACCOUNT/$APPLICATION/$SERVICE
+    image_name: $REGISTRY_ACCOUNT/$SERVICE
     image_tag: latest
     pull: false
     options: --privileged=true
@@ -30,8 +29,8 @@ build:
     - ./node_modules/.bin/istanbul cover grunt -- -u tdd
     - ./node_modules/.bin/istanbul report cobertura --dir  ./shippable/codecoverage/
     - echo $BUILD_NUMBER > ~/buildConfig.txt
-    - docker tag -f $REGISTRY_ACCOUNT/$APPLICATION/$SERVICE:latest $REGISTRY_ACCOUNT/$APPLICATION/$SERVICE:$BRANCH.$BUILD_NUMBER
-    - docker push $REGISTRY_ACCOUNT/$APPLICATION/$SERVICE:$BRANCH.$BUILD_NUMBER
+    - docker tag -f $REGISTRY_ACCOUNT/$SERVICE:latest $REGISTRY_ACCOUNT/$SERVICE:$BRANCH.$BUILD_NUMBER
+    - docker push $REGISTRY_ACCOUNT/$SERVICE:$BRANCH.$BUILD_NUMBER
 
 integrations:
     hub:
