@@ -8,10 +8,9 @@ node_js:
 env:
   global:
     - XUNIT_FILE=./shippable/testresults/result.xml
-    - APPLICATION=aye0aye
-    - SERVICE=micro-api-beta
-    - PROJECT=
-    - REGISTRY_ACCOUNT=gcr.io/ # image registry account name/location
+    - APPLICATION=shippable
+    - SERVICE=micro-api
+    - REGISTRY_ACCOUNT=195324580561.dkr.ecr.us-west-2.amazonaws.com # image registry account name/location
 
 build:
   pre_ci:
@@ -36,8 +35,9 @@ build:
 
 integrations:
     hub:
-      - integrationName: "Amazon ECR - ttrahan"
+      - integrationName: "labmvdev"
         type: ecr
+        region: us-west-2
         agent_only: false
         branches:
           only:
